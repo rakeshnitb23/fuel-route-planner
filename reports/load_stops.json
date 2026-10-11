@@ -1,0 +1,761 @@
+{
+  "generated_at": "2026-10-11T14:00:01+00:00",
+  "summary": {
+    "unique_opis_ids": 6738,
+    "loaded": 6614,
+    "unmatched": 124,
+    "unmatched_pct": 1.84,
+    "unmatched_non_us": 112,
+    "unmatched_us": 12,
+    "us_stations": 6626,
+    "unmatched_us_pct": 0.18
+  },
+  "unmatched_us": [
+    {
+      "opis_id": 66780,
+      "name": "DIAMOND #20",
+      "city": "Evergreen",
+      "state": "AL"
+    },
+    {
+      "opis_id": 67325,
+      "name": "LOVES TRAVEL STOP #225",
+      "city": "Evergreen",
+      "state": "AL"
+    },
+    {
+      "opis_id": 4179,
+      "name": "CIRCLE K #2705352",
+      "city": "Port Wentworth",
+      "state": "GA"
+    },
+    {
+      "opis_id": 52641,
+      "name": "PILOT TRAVEL CENTERS #71",
+      "city": "Port Wentworth",
+      "state": "GA"
+    },
+    {
+      "opis_id": 70783,
+      "name": "ENMARKET #820",
+      "city": "Port Wentworth",
+      "state": "GA"
+    },
+    {
+      "opis_id": 71869,
+      "name": "PORT FUEL CENTER",
+      "city": "Port Wentworth",
+      "state": "GA"
+    },
+    {
+      "opis_id": 72429,
+      "name": "PARKERS #16 (DISCOUNT AVAILABLE)",
+      "city": "Port Wentworth",
+      "state": "GA"
+    },
+    {
+      "opis_id": 73072,
+      "name": "QUIKTRIP #7204",
+      "city": "University Park",
+      "state": "IL"
+    },
+    {
+      "opis_id": 60250,
+      "name": "ELIZABETH TRUCK STOP",
+      "city": "Elizabethport",
+      "state": "NJ"
+    },
+    {
+      "opis_id": 65398,
+      "name": "QUICK FUEL #2306",
+      "city": "Brookpark",
+      "state": "OH"
+    },
+    {
+      "opis_id": 70983,
+      "name": "QUARLES #4943",
+      "city": "Henrico",
+      "state": "VA"
+    },
+    {
+      "opis_id": 72447,
+      "name": "SHEETZ #689",
+      "city": "Henrico",
+      "state": "VA"
+    }
+  ],
+  "unmatched_non_us": [
+    {
+      "opis_id": 66958,
+      "name": "FLYING J FUEL STOP #813",
+      "city": "Airdrie",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67328,
+      "name": "FLYING J #792",
+      "city": "Brooks",
+      "state": "AB"
+    },
+    {
+      "opis_id": 20129,
+      "name": "FLYING J #848- ROAD KING TRUCK",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 65897,
+      "name": "PETRO-CANADA",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66991,
+      "name": "FLYING J TRAVEL PLAZA #793",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66992,
+      "name": "FLYING J CARDLOCK #814",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67049,
+      "name": "FLYING J TRAVEL PLAZA #785",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67506,
+      "name": "PETRO-CANADA",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 68639,
+      "name": "PETRO-CANADA",
+      "city": "Calgary",
+      "state": "AB"
+    },
+    {
+      "opis_id": 629,
+      "name": "FLYING J #850",
+      "city": "Edmonton",
+      "state": "AB"
+    },
+    {
+      "opis_id": 65901,
+      "name": "PETRO-CANADA",
+      "city": "Edmonton",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66418,
+      "name": "FLYING J CARDLOCK #818",
+      "city": "Edson",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67453,
+      "name": "PETRO-CANADA",
+      "city": "Fort Mcmurray",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67500,
+      "name": "PETRO-CANADA",
+      "city": "Fort Mcmurray",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67508,
+      "name": "PETRO-CANADA",
+      "city": "Fort Saskatchewan",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66979,
+      "name": "FLYING J CARDLOCK #820",
+      "city": "Grande Prairie",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67503,
+      "name": "PETRO-CANADA",
+      "city": "Grande Prairie",
+      "state": "AB"
+    },
+    {
+      "opis_id": 64702,
+      "name": "FLYING J TRAVEL PLAZA #846",
+      "city": "Hanna",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66217,
+      "name": "PETRO-CANADA",
+      "city": "Hinton",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66219,
+      "name": "PETRO-CANADA",
+      "city": "Lethbridge",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66988,
+      "name": "FLYING J CARDLOCK #821",
+      "city": "Lethbridge",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67018,
+      "name": "FLYING J CARDLOCK #822",
+      "city": "Lloydminster",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67455,
+      "name": "PETRO-CANADA",
+      "city": "Lloydminster",
+      "state": "AB"
+    },
+    {
+      "opis_id": 69359,
+      "name": "PETRO-CANADA",
+      "city": "Medicine Hat",
+      "state": "AB"
+    },
+    {
+      "opis_id": 70290,
+      "name": "FLYING J #868",
+      "city": "Medicine Hat",
+      "state": "AB"
+    },
+    {
+      "opis_id": 659,
+      "name": "FLYING J #869",
+      "city": "Nanton",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66167,
+      "name": "PETRO-CANADA",
+      "city": "Nisku",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67007,
+      "name": "FLYING J TRAVEL PLAZA #795",
+      "city": "Nisku",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66279,
+      "name": "PETRO-CANADA",
+      "city": "Red Deer",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67327,
+      "name": "FLYING J #796",
+      "city": "Red Deer",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66836,
+      "name": "FLYING J TRAVEL PLAZA #786",
+      "city": "Sherwood Park",
+      "state": "AB"
+    },
+    {
+      "opis_id": 67459,
+      "name": "PETRO-CANADA",
+      "city": "Valleyview",
+      "state": "AB"
+    },
+    {
+      "opis_id": 70335,
+      "name": "PILOT #1200",
+      "city": "Valleyview",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66391,
+      "name": "FLYING J CARDLOCK #824",
+      "city": "Whitecourt",
+      "state": "AB"
+    },
+    {
+      "opis_id": 66977,
+      "name": "FLYING J TRAVEL PLAZA #827",
+      "city": "Abbotsford",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67460,
+      "name": "PETRO-CANADA",
+      "city": "Abbotsford",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66976,
+      "name": "FLYING J FUEL STOP #799",
+      "city": "Chilliwack",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67463,
+      "name": "PETRO-CANADA",
+      "city": "Chilliwack",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66190,
+      "name": "PETRO-CANADA",
+      "city": "Coquitlam",
+      "state": "BC"
+    },
+    {
+      "opis_id": 61908,
+      "name": "CRANBROOK HUSKY",
+      "city": "Cranbrook",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67020,
+      "name": "FLYING J CARDLOCK #828",
+      "city": "Cranbrook",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67019,
+      "name": "FLYING J CARDLOCK #829",
+      "city": "Creston",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66981,
+      "name": "FLYING J CARDLOCK #830",
+      "city": "Dawson Creek",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67031,
+      "name": "FLYING J CARDLOCK #798",
+      "city": "Delta",
+      "state": "BC"
+    },
+    {
+      "opis_id": 68482,
+      "name": "PETRO-CANADA",
+      "city": "Delta",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66193,
+      "name": "PETRO-CANADA",
+      "city": "Fort Nelson",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67543,
+      "name": "PETRO-CANADA",
+      "city": "Fort St John",
+      "state": "BC"
+    },
+    {
+      "opis_id": 68855,
+      "name": "FLYING J #861",
+      "city": "Hope",
+      "state": "BC"
+    },
+    {
+      "opis_id": 70339,
+      "name": "FLYING J #1197",
+      "city": "Jaffray",
+      "state": "BC"
+    },
+    {
+      "opis_id": 65939,
+      "name": "PETRO-CANADA",
+      "city": "Kamloops",
+      "state": "BC"
+    },
+    {
+      "opis_id": 68641,
+      "name": "PETRO-CANADA",
+      "city": "Kitwanga",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66986,
+      "name": "FLYING J CARDLOCK #832",
+      "city": "New Westminster",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66203,
+      "name": "PETRO-CANADA",
+      "city": "Prince George",
+      "state": "BC"
+    },
+    {
+      "opis_id": 66983,
+      "name": "FLYING J FUEL STOP #801",
+      "city": "Prince George",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67540,
+      "name": "PETRO-CANADA",
+      "city": "Quesnel",
+      "state": "BC"
+    },
+    {
+      "opis_id": 67469,
+      "name": "PETRO-CANADA",
+      "city": "Brandon",
+      "state": "MB"
+    },
+    {
+      "opis_id": 67484,
+      "name": "PETRO-CANADA",
+      "city": "Dugald",
+      "state": "MB"
+    },
+    {
+      "opis_id": 66946,
+      "name": "FLYING J TRAVEL PLAZA #788",
+      "city": "Headingley",
+      "state": "MB"
+    },
+    {
+      "opis_id": 67014,
+      "name": "FLYING J FUEL STOP #803",
+      "city": "Portage La Prairie",
+      "state": "MB"
+    },
+    {
+      "opis_id": 70161,
+      "name": "FLYING J #839",
+      "city": "Ste Agathe",
+      "state": "MB"
+    },
+    {
+      "opis_id": 66947,
+      "name": "FLYING J TRAVEL PLAZA #804",
+      "city": "Winnipeg",
+      "state": "MB"
+    },
+    {
+      "opis_id": 66973,
+      "name": "FLYING J TRAVEL PLAZA #835",
+      "city": "Winnipeg",
+      "state": "MB"
+    },
+    {
+      "opis_id": 65921,
+      "name": "PETRO-CANADA",
+      "city": "Moncton",
+      "state": "NB"
+    },
+    {
+      "opis_id": 68634,
+      "name": "PETRO-CANADA",
+      "city": "Dartmouth",
+      "state": "NS"
+    },
+    {
+      "opis_id": 67603,
+      "name": "FLYING J #862",
+      "city": "Ayr",
+      "state": "ON"
+    },
+    {
+      "opis_id": 52493,
+      "name": "10 ACRE TRUCKSTOP",
+      "city": "Belleville",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67477,
+      "name": "PETRO-CANADA",
+      "city": "Brampton",
+      "state": "ON"
+    },
+    {
+      "opis_id": 65463,
+      "name": "FLYING J CARDLOCK #825",
+      "city": "Brantford",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67568,
+      "name": "PETRO-CANADA",
+      "city": "Burlington",
+      "state": "ON"
+    },
+    {
+      "opis_id": 68733,
+      "name": "PETRO-CANADA",
+      "city": "Cochrane",
+      "state": "ON"
+    },
+    {
+      "opis_id": 62016,
+      "name": "PETRO-CANADA",
+      "city": "Concord",
+      "state": "ON"
+    },
+    {
+      "opis_id": 72213,
+      "name": "PETRO-CANADA",
+      "city": "Cookstown",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67478,
+      "name": "PETRO-CANADA",
+      "city": "Dryden",
+      "state": "ON"
+    },
+    {
+      "opis_id": 61978,
+      "name": "PETRO-CANADA",
+      "city": "Etobicoke",
+      "state": "ON"
+    },
+    {
+      "opis_id": 66978,
+      "name": "FLYING J FUEL STOP #805",
+      "city": "Etobicoke",
+      "state": "ON"
+    },
+    {
+      "opis_id": 66827,
+      "name": "FLYING J #860",
+      "city": "Fort Erie",
+      "state": "ON"
+    },
+    {
+      "opis_id": 61998,
+      "name": "PETRO-CANADA",
+      "city": "Gloucester",
+      "state": "ON"
+    },
+    {
+      "opis_id": 65469,
+      "name": "PETRO-CANADA",
+      "city": "Hamilton",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67550,
+      "name": "PETRO-CANADA",
+      "city": "Hamilton",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67570,
+      "name": "PETRO-CANADA",
+      "city": "Hornby",
+      "state": "ON"
+    },
+    {
+      "opis_id": 70332,
+      "name": "FLYING J #1201",
+      "city": "Inglewood",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67027,
+      "name": "FLYING J FUEL STOP #806",
+      "city": "Kapuskasing",
+      "state": "ON"
+    },
+    {
+      "opis_id": 66829,
+      "name": "KINGSTON CARDLOCK",
+      "city": "Kingston",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67556,
+      "name": "PETRO-CANADA",
+      "city": "Kingston",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67476,
+      "name": "PETRO-CANADA",
+      "city": "Kitchener",
+      "state": "ON"
+    },
+    {
+      "opis_id": 68283,
+      "name": "FLYING J# 852",
+      "city": "Lancaster",
+      "state": "ON"
+    },
+    {
+      "opis_id": 64689,
+      "name": "FLYING J TRAVEL PLAZA #789",
+      "city": "London",
+      "state": "ON"
+    },
+    {
+      "opis_id": 65476,
+      "name": "PETRO-CANADA",
+      "city": "London",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67560,
+      "name": "PETRO-CANADA",
+      "city": "Milton",
+      "state": "ON"
+    },
+    {
+      "opis_id": 66984,
+      "name": "FLYING J TRAVEL PLAZA #807",
+      "city": "Mississauga",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67566,
+      "name": "CIRCLE K",
+      "city": "Mississauga",
+      "state": "ON"
+    },
+    {
+      "opis_id": 72917,
+      "name": "PETRO-CANADA",
+      "city": "Mississauga",
+      "state": "ON"
+    },
+    {
+      "opis_id": 64524,
+      "name": "FLYING J TRAVEL PLAZA #790",
+      "city": "Napanee",
+      "state": "ON"
+    },
+    {
+      "opis_id": 71602,
+      "name": "SHELL",
+      "city": "Oldcastle",
+      "state": "ON"
+    },
+    {
+      "opis_id": 61983,
+      "name": "PETRO-CANADA",
+      "city": "Orono",
+      "state": "ON"
+    },
+    {
+      "opis_id": 69032,
+      "name": "FLYING J #866",
+      "city": "Pass Lake",
+      "state": "ON"
+    },
+    {
+      "opis_id": 65484,
+      "name": "FLYING J #865",
+      "city": "Pickering",
+      "state": "ON"
+    },
+    {
+      "opis_id": 61996,
+      "name": "PETRO-CANADA",
+      "city": "Sarnia",
+      "state": "ON"
+    },
+    {
+      "opis_id": 69586,
+      "name": "FLYING J #853",
+      "city": "Sault Ste Marie",
+      "state": "ON"
+    },
+    {
+      "opis_id": 66831,
+      "name": "PETRO-CANADA",
+      "city": "Sudbury",
+      "state": "ON"
+    },
+    {
+      "opis_id": 66967,
+      "name": "FLYING J #461",
+      "city": "Tilbury",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67571,
+      "name": "PETRO-CANADA",
+      "city": "Windsor",
+      "state": "ON"
+    },
+    {
+      "opis_id": 65496,
+      "name": "FLYING J #463",
+      "city": "Wyoming",
+      "state": "ON"
+    },
+    {
+      "opis_id": 67389,
+      "name": "COUCHE-TARD",
+      "city": "Saint-Liboire",
+      "state": "QC"
+    },
+    {
+      "opis_id": 69634,
+      "name": "FLYING J #863",
+      "city": "Balgonie",
+      "state": "SK"
+    },
+    {
+      "opis_id": 69295,
+      "name": "FLYING J #864",
+      "city": "Davidson",
+      "state": "SK"
+    },
+    {
+      "opis_id": 67024,
+      "name": "FLYING J FUEL STOP #811",
+      "city": "Moose Jaw",
+      "state": "SK"
+    },
+    {
+      "opis_id": 67016,
+      "name": "FLYING J CARDLOCK #842",
+      "city": "Regina",
+      "state": "SK"
+    },
+    {
+      "opis_id": 66859,
+      "name": "FLYING J TRAVEL PLAZA #791",
+      "city": "Saskatoon",
+      "state": "SK"
+    },
+    {
+      "opis_id": 67011,
+      "name": "FLYING J CARDLOCK #844",
+      "city": "Yorkton",
+      "state": "SK"
+    },
+    {
+      "opis_id": 69383,
+      "name": "PETRO-CANADA",
+      "city": "Watson Lake",
+      "state": "YT"
+    },
+    {
+      "opis_id": 67769,
+      "name": "PETRO-CANADA",
+      "city": "Whitehorse",
+      "state": "YT"
+    }
+  ]
+}

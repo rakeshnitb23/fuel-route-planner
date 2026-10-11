@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuel Route Planner</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1d2330; --muted:#5b6475; --line:#d9dde4;
+          --accent:#1f6feb; --err:#b42318; --errbg:#fef3f2; --pick:#eaf2ff; color-scheme:light; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background:var(--bg); color:var(--text); }
+  .wrap { max-width:1100px; margin:0 auto; padding:16px; }
+  h1 { font-size:1.4rem; margin:8px 0 4px; }
+  .sub { color:var(--muted); margin:0 0 16px; font-size:.9rem; }
+  .sub a { color:var(--accent); }
+  form { background:var(--card); padding:16px; border-radius:8px; display:grid; gap:12px;
+         grid-template-columns:1fr 1fr; }
+  .full { grid-column:1 / -1; }
+  label { display:block; font-size:.85rem; font-weight:600; margin-bottom:4px; }
+  input, select, textarea { width:100%; padding:8px 10px; border:1px solid var(--line);
+         border-radius:6px; font:inherit; background:#fff; color:inherit; }
+  textarea { min-height:60px; resize:vertical; }
+  .hint { font-size:.8rem; color:var(--muted); margin-top:4px; }
+  .examples { display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:.8rem; color:var(--muted); }
+  .examples button { padding:4px 10px; font-size:.8rem; font-weight:500; background:#eef1f5;
+         color:var(--text); border:1px solid var(--line); }
+  button { padding:10px 18px; background:var(--accent); color:#fff; border:0; border-radius:6px;
+           font-weight:600; font-size:1rem; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:wait; }
+  #error { display:none; margin-top:16px; padding:12px; border-radius:8px; background:var(--errbg); color:var(--err); }
+  #error ul { margin:6px 0 0; padding-left:20px; }
+  #results { display:none; }
+  .meta { margin-top:12px; font-size:.8rem; color:var(--muted); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-top:12px; }
+  .card { background:var(--card); padding:12px; border-radius:8px; }
+  .card .k { font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .card .v { font-size:1.2rem; font-weight:700; margin-top:4px; overflow-wrap:anywhere; }
+  #decision { display:none; margin-top:16px; padding:12px; border-left:4px solid var(--accent);
+              background:var(--card); border-radius:4px; }
+  #decision .by { font-size:.8rem; color:var(--muted); margin-top:4px; }
+  #map { height:420px; border-radius:8px; margin-top:16px; background:#e5e7eb; }
+  .maplink { display:inline-block; margin-top:8px; font-size:.9rem; color:var(--accent); }
+  h2 { font-size:1.05rem; margin:20px 0 8px; }
+  .tablebox { overflow-x:auto; background:var(--card); border-radius:8px; }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
+  th { background:#eef1f5; font-weight:600; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  tr.picked td { background:var(--pick); font-weight:600; }
+  details { margin-top:20px; background:var(--card); border-radius:8px; padding:10px 12px; }
+  summary { cursor:pointer; font-weight:600; font-size:.9rem; }
+  pre { margin:10px 0 0; max-height:360px; overflow:auto; font-size:.8rem; background:#f3f4f6;
+        padding:10px; border-radius:6px; white-space:pre-wrap; overflow-wrap:anywhere; }
+  @media (max-width:640px) { form { grid-template-columns:1fr; } #map { height:320px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Fuel Route Planner</h1>
+  <p class="sub">
+    Enter two US cities as "City, ST" or "City, State". Choose a fuel strategy yourself, or
+    describe what you want and let the AI pick one. This page calls the same JSON API you can use
+    from Postman: <code>POST /api/route/</code> and <code>POST /api/route/smart/</code>.
+  </p>
+
+  <form id="form">
+    <div>
+      <label for="start">Start</label>
+      <input id="start" required maxlength="200" placeholder="Chicago, IL" value="Chicago, IL" autocomplete="off">
+    </div>
+    <div>
+      <label for="finish">Finish</label>
+      <input id="finish" required maxlength="200" placeholder="Houston, TX" value="Houston, TX" autocomplete="off">
+    </div>
+    <div class="full examples" id="examples">
+      <span>Try:</span>
+      <button type="button" data-start="New York, NY" data-finish="Los Angeles, CA">New York → Los Angeles</button>
+      <button type="button" data-start="Seattle, WA" data-finish="Miami, FL">Seattle → Miami</button>
+      <button type="button" data-start="St. Louis, MO" data-finish="Denver, CO">St. Louis → Denver</button>
+      <button type="button" data-start="Seattle, WA" data-finish="San Diego, CA">Seattle → San Diego (range gap)</button>
+    </div>
+    <div class="full">
+      <label for="mode">How to choose fuel stops</label>
+      <select id="mode">
+        <option value="manual">I'll choose the strategy</option>
+        <option value="agent">Let the AI choose from my preference</option>
+      </select>
+    </div>
+    <div class="full" id="strategyRow">
+      <label for="strategy">Strategy</label>
+      <select id="strategy">
+        <option value="lowest_cost">lowest_cost: cheapest total, may use many stops</option>
+        <option value="balanced">balanced: only moves on for a 5¢/gal saving</option>
+        <option value="fewest_stops">fewest_stops: fill up, fewest stops, costs a little more</option>
+      </select>
+    </div>
+    <div class="full" id="prefRow" hidden>
+      <label for="preference">What matters to you?</label>
+      <textarea id="preference" maxlength="300" placeholder="I'm in a hurry and don't want to stop often."></textarea>
+      <div class="hint">Up to 300 characters. Leave it empty to get the cheapest plan. Without an
+        API key on the server, the cheapest plan is used and the page says why.</div>
+    </div>
+    <div class="full"><button id="go" type="submit">Plan route</button></div>
+  </form>
+
+  <div id="error" role="alert"></div>
+
+  <div id="results" aria-live="polite">
+    <div class="meta" id="meta"></div>
+    <div class="cards" id="cards"></div>
+    <div id="decision"><div id="decisionText"></div><div class="by" id="decisionBy"></div></div>
+    <div id="map"></div>
+    <a id="maplink" class="maplink" target="_blank" rel="noopener" hidden>Open full map page ↗</a>
+
+    <div id="compareBox" hidden>
+      <h2>Strategy comparison</h2>
+      <div class="tablebox"><table id="compare"></table></div>
+    </div>
+
+    <h2>Fuel stops</h2>
+    <div class="tablebox"><table id="stops"></table></div>
+
+    <details>
+      <summary>Raw API request and response</summary>
+      <pre id="curl"></pre>
+      <pre id="raw"></pre>
+    </details>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const money = (n) => (typeof n === "number" ? "$" + n.toFixed(2) : "—");
+  const num = (n, d = 1) => (typeof n === "number" ? n.toFixed(d) : "—");
+  const el = (tag, text, cls) => {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (cls) node.className = cls;
+    return node;
+  };
+
+  const DECIDED_BY = {
+    llm: "chosen by the AI from your preference",
+    default: "no preference given",
+    identical: "all strategies give the same plan, so the AI was not asked",
+    fallback: "AI unavailable, cheapest plan used",
+  };
+
+  // Manual strategy vs AI preference
+  function syncMode() {
+    const agent = $("mode").value === "agent";
+    $("strategyRow").hidden = agent;
+    $("prefRow").hidden = !agent;
+  }
+  $("mode").addEventListener("change", syncMode);
+  syncMode();  // browsers may restore the select after a reload
+
+  $("examples").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-start]");
+    if (!b) return;
+    $("start").value = b.dataset.start;
+    $("finish").value = b.dataset.finish;
+    $("form").requestSubmit();
+  });
+
+  // Map. GeoJSON and the API use [lon, lat]; Leaflet uses [lat, lon]. Flip only here.
+  let map, layer;
+  function ensureMap() {
+    if (map) return true;
+    if (typeof L === "undefined") {
+      $("map").textContent = "Map library could not load; the results below are still valid.";
+      return false;
+    }
+    map = L.map("map").setView([39.5, -98.35], 4);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+    layer = L.layerGroup().addTo(map);
+    return true;
+  }
+
+  function stopPopup(s, i) {
+    const box = el("div");
+    box.append(el("strong", `${i + 1}. ${s.name}`), el("br"),
+      `${s.city}, ${s.state}`, el("br"),
+      `Mile ${num(s.mile_marker)} · $${num(s.price, 3)}/gal`, el("br"),
+      `${num(s.gallons, 2)} gal · ${money(s.cost)}`);
+    return box;
+  }
+
+  function drawMap(data) {
+    if (!ensureMap()) return;
+    layer.clearLayers();
+    const coords = (data.route && data.route.coordinates) || [];
+    if (coords.length) {
+      const line = L.polyline(coords.map(([lon, lat]) => [lat, lon]), { color: "#2563eb", weight: 4 }).addTo(layer);
+      map.fitBounds(line.getBounds(), { padding: [20, 20] });
+      const pts = line.getLatLngs();
+      L.marker(pts[0]).bindPopup(el("span", "Start: " + data.start)).addTo(layer);
+      L.marker(pts[pts.length - 1]).bindPopup(el("span", "Finish: " + data.finish)).addTo(layer);
+    }
+    (data.fuel_stops || []).forEach((s, i) => {
+      if (typeof s.lat !== "number" || typeof s.lon !== "number") return;
+      L.circleMarker([s.lat, s.lon], { radius: 7, color: "#b54708", fillOpacity: 0.9 })
+        .bindPopup(stopPopup(s, i)).addTo(layer);
+    });
+    setTimeout(() => map.invalidateSize(), 0);
+  }
+
+  // Tables are built with textContent only: no HTML from the API is ever injected.
+  function fillTable(table, headers, rows, numericCols = [], pickedRow = -1) {
+    table.replaceChildren();
+    const head = table.createTHead().insertRow();
+    headers.forEach((h, i) => head.appendChild(el("th", h, numericCols.includes(i) ? "num" : "")));
+    const body = table.createTBody();
+    rows.forEach((r, ri) => {
+      const tr = body.insertRow();
+      if (ri === pickedRow) tr.className = "picked";
+      r.forEach((cell, i) => {
+        const td = tr.insertCell();
+        td.textContent = cell;
+        if (numericCols.includes(i)) td.className = "num";
+      });
+    });
+  }
+
+  function card(k, v) {
+    const d = el("div", undefined, "card");
+    d.append(el("div", k, "k"), el("div", v, "v"));
+    return d;
+  }
+
+  function render(data, info) {
+    const stops = data.fuel_stops || [];
+    $("meta").textContent = `HTTP ${info.status} · ${info.ms} ms · X-Cache: ${info.cache || "—"} · ${info.url}`;
+    $("cards").replaceChildren(
+      card("Distance", num(data.total_distance_miles) + " mi"),
+      card("Fuel", num(data.total_gallons) + " gal"),
+      card("Total cost", money(data.total_cost)),
+      card("Stops", String(stops.length)),
+      card("Strategy", data.strategy),
+      card("Route cache", info.cache || "—"),
+    );
+
+    const d = data.decision;
+    if (d) {
+      $("decisionText").textContent = `Why ${d.strategy}: ${d.reason}`;
+      $("decisionBy").textContent = "Decided by: " + d.decided_by +
+        (DECIDED_BY[d.decided_by] ? ` (${DECIDED_BY[d.decided_by]})` : "") +
+        (d.fallback_reason ? ` · fallback_reason: ${d.fallback_reason}` : "");
+      $("decision").style.display = "block";
+    } else {
+      $("decision").style.display = "none";
+    }
+
+    fillTable(
+      $("stops"),
+      ["#", "Name", "City", "State", "Mile", "Price/gal", "Gallons", "Cost"],
+      stops.map((s, i) => [i + 1, s.name, s.city, s.state, num(s.mile_marker),
+                           "$" + num(s.price, 3), num(s.gallons, 2), money(s.cost)]),
+      [0, 4, 5, 6, 7],
+    );
+    if (!stops.length) $("stops").createTBody().insertRow().insertCell().textContent = "No stops.";
+
+    const cmp = data.comparison;
+    if (Array.isArray(cmp) && cmp.length) {
+      fillTable(
+        $("compare"),
+        ["Strategy", "Stops", "Total cost", "Extra vs lowest_cost", "How it works"],
+        cmp.map((r) => [r.strategy, r.stops, money(r.total_cost),
+                        `+${money(r.extra_cost)} (+${num(r.extra_cost_pct, 2)}%)`, r.description]),
+        [1, 2, 3],
+        cmp.findIndex((r) => r.strategy === data.strategy),
+      );
+      $("compareBox").hidden = false;
+    } else {
+      $("compareBox").hidden = true;
+    }
+
+    if (data.map_url) {
+      $("maplink").href = data.map_url;
+      $("maplink").hidden = false;
+    } else {
+      $("maplink").hidden = true;
+    }
+
+    $("results").style.display = "block";
+    drawMap(data);
+  }
+
+  function showError(err, status) {
+    const box = $("error");
+    box.replaceChildren();
+    if (!err) {
+      box.textContent = status ? `Request failed (HTTP ${status}).` : "Could not reach the server.";
+    } else {
+      box.append(el("strong", `${err.message} `), el("span", `(${err.code}, HTTP ${status})`));
+      const details = err.details || {};
+      const items = Object.entries(details).map(([k, v]) =>
+        el("li", `${k}: ${Array.isArray(v) ? v.join(" ") : typeof v === "object" ? JSON.stringify(v) : v}`));
+      if (items.length) {
+        const ul = el("ul");
+        ul.append(...items);
+        box.append(ul);
+      }
+    }
+    box.style.display = "block";
+  }
+
+  function curlFor(url, body) {
+    const json = JSON.stringify(body).replace(/'/g, "'\\''");
+    return `curl -i -X POST ${location.origin}${url} \\\n  -H "Content-Type: application/json" \\\n  -d '${json}'`;
+  }
+
+  $("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("error").style.display = "none";
+    const agent = $("mode").value === "agent";
+    const url = agent ? "/api/route/smart/" : "/api/route/";
+    const body = { start: $("start").value.trim(), finish: $("finish").value.trim() };
+    if (agent) body.preference = $("preference").value.trim();
+    else body.strategy = $("strategy").value;
+
+    $("go").disabled = true;
+    $("go").textContent = agent ? "AI is choosing…" : "Planning…";
+    const t0 = performance.now();
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) {
+        $("results").style.display = "none";
+        showError(data && data.error, res.status);
+        return;
+      }
+      render(data, { status: res.status, ms: Math.round(performance.now() - t0),
+                     cache: res.headers.get("X-Cache"), url });
+      $("curl").textContent = curlFor(url, body);
+      $("raw").textContent = JSON.stringify(data, null, 2);
+    } catch (err) {
+      $("results").style.display = "none";
+      showError(null, 0);
+    } finally {
+      $("go").disabled = false;
+      $("go").textContent = "Plan route";
+    }
+  });
+</script>
+</body>
+</html>

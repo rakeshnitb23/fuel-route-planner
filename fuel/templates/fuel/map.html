@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fuel Route Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+    header { padding: 10px 16px; background: #1f2937; color: #fff; font-size: 14px; }
+    header strong { font-size: 16px; }
+    #map { height: calc(100% - 58px); }
+    .error { padding: 24px 16px; color: #b91c1c; }
+  </style>
+</head>
+<body>
+{% if error %}
+  <div class="error">
+    <strong>Could not plan this route.</strong>
+    <p>{{ error.message }}</p>
+    {% if error.details %}
+      <ul>{% for key, value in error.details.items %}<li>{{ key }}: {{ value }}</li>{% endfor %}</ul>
+    {% endif %}
+    <small>Error code: {{ error.code }}</small>
+  </div>
+{% else %}
+  <header>
+    <strong>{{ start }} → {{ finish }}</strong><br>
+    {{ total_miles }} miles · {{ stop_count }} fuel stops · ${{ total_cost }} · strategy: {{ strategy }}
+  </header>
+  <div id="map"></div>
+  {{ map_data|json_script:"map-data" }}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const data = JSON.parse(document.getElementById('map-data').textContent);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+
+    const map = L.map('map');
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    // GeoJSON / OSRM use [lon, lat]; Leaflet uses [lat, lon]. Flip only here.
+    const line = L.polyline(data.route.map(([lon, lat]) => [lat, lon]), { color: '#2563eb', weight: 4 }).addTo(map);
+
+    data.stops.forEach((s, i) => {
+      L.marker([s.lat, s.lon]).addTo(map).bindPopup(
+        `<strong>${i + 1}. ${esc(s.name)}</strong><br>${esc(s.city)}, ${esc(s.state)}<br>` +
+        `Mile ${s.mile_marker} · $${s.price.toFixed(3)}/gal<br>` +
+        `${s.gallons.toFixed(2)} gal · $${s.cost.toFixed(2)}`
+      );
+    });
+
+    map.fitBounds(line.getBounds(), { padding: [20, 20] });
+  </script>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,7 @@
+Django==6.1.2
+djangorestframework==3.18.3
+psycopg[binary]==3.3.6
+redis==8.0.1
+anthropic==1.13.0
+gunicorn==26.2.0
+whitenoise==6.12.0

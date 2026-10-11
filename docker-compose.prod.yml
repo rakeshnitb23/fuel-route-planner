@@ -1,0 +1,79 @@
+# Production: one server, HTTPS by Caddy, Gunicorn instead of runserver.
+#   cp .env.production.example .env   # then fill it in
+#   docker compose -f docker-compose.prod.yml up -d --build
+# Only Caddy publishes ports (80, 443). Postgres, Redis and Django stay on the internal network.
+
+x-defaults: &defaults
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+
+services:
+  db:
+    <<: *defaults
+    image: postgis/postgis:17-3.5
+    platform: linux/amd64
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    <<: *defaults
+    image: redis:7.4-alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lfu
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    <<: *defaults
+    build: .
+    # Timeout 60 s: a request can wait up to 20 s for the route lock, then call OSRM (15 s)
+    # and the LLM (5 s). Gunicorn's default 30 s would kill it.
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             gunicorn spotter.wsgi -w 3 -b 0.0.0.0:8000 --timeout 60 --access-logfile -"
+    env_file:
+      - .env
+    environment:
+      NUM_PROXIES: "1"   # behind Caddy: the client IP is the last X-Forwarded-For entry
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  caddy:
+    <<: *defaults
+    image: caddy:2.11-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data        # HTTPS certificates: keep across restarts
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  postgis_data:
+  caddy_data:
+  caddy_config:

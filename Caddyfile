@@ -1,0 +1,6 @@
+# Caddy gets and renews the HTTPS certificate for $DOMAIN automatically (Let's Encrypt).
+# DOMAIN comes from .env, so this file never needs editing.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy web:8000
+}
