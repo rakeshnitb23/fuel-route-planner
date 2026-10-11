@@ -327,6 +327,12 @@ existing OpenRouter credits.
 Not tested here: a real AWS server and a real certificate (needs your account and domain),
 and a successful OpenRouter answer (needs your key).
 
+### 7.6 Fixed after going live
+
+| Problem | Cause | Fix |
+|---|---|---|
+| Map tiles showed OpenStreetMap's 403 "Access blocked: app is not following the tile usage policy" on the live site | Django's default `Referrer-Policy: same-origin` made browsers send no `Referer` to `tile.openstreetmap.org`, and OSM's [tile usage policy](https://operations.osmfoundation.org/policies/tiles/) requires one | `SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'`: other sites receive only our origin (`https://fuel.lazymonk.si/`), never full URLs with query strings. Test added; verified in Chrome that tile requests now carry the Referer |
+
 ## 8. Known limitations
 
 - Stop locations are city centers, not exact addresses.

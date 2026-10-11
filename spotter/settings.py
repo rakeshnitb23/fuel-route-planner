@@ -47,6 +47,10 @@ if not DEBUG:
     if placeholders:
         raise ImproperlyConfigured(f"Replace 'change-me' in .env: {', '.join(placeholders)}")
 
+# Send our origin (not the full URL) as Referer to other sites. OpenStreetMap's tile servers
+# block browser requests without a Referer; Django's default 'same-origin' sends none.
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
 if not DEBUG:
     # Caddy terminates HTTPS and tells Django the original scheme.
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

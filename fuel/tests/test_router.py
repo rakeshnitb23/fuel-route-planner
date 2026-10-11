@@ -371,3 +371,10 @@ class IndexPageTests(SimpleTestCase):
         self.assertIn('<title>Fuel Route Planner</title>', html)
         self.assertIn('/api/route/smart/', html)
         self.assertIn('"/api/route/"', html)
+
+    def test_pages_send_origin_as_referer_for_map_tiles(self):
+        # OpenStreetMap blocks tile requests without a Referer (403 "Access blocked").
+        for url in ('/', '/api/route/map/?start=x'):
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url)['Referrer-Policy'],
+                                 'strict-origin-when-cross-origin')
