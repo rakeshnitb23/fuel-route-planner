@@ -202,7 +202,7 @@ All run in `~/fuel-route` on the server.
 ```bash
 docker compose -f docker-compose.prod.yml logs -f web        # app logs (Ctrl+C to stop)
 docker compose -f docker-compose.prod.yml logs caddy         # HTTPS / certificate logs
-docker compose -f docker-compose.prod.yml restart web        # after editing .env
+docker compose -f docker-compose.prod.yml up -d             # after editing .env (restart does not reload it)
 
 # Deploy new code
 git pull
@@ -246,11 +246,11 @@ OpenRouter key.
 | Problem | Fix |
 |---|---|
 | Browser: certificate error, or Caddy logs `challenge failed` | The domain doesn't point at `<ELASTIC_IP>` yet (`dig +short <domain>`), or port 80 is closed in the security group. Fix it, then `docker compose -f docker-compose.prod.yml restart caddy` |
-| `400 Bad Request` | `DOMAIN` in `.env` doesn't match the address you opened. Fix it, then `restart web` |
+| `400 Bad Request` | `DOMAIN` in `.env` doesn't match the address you opened. Fix it, then `docker compose -f docker-compose.prod.yml up -d` |
 | `502` from Caddy right after starting | `web` is still migrating or starting; wait 20 s. If it persists: `logs web` |
 | `web` exits with `SECRET_KEY must be set`, `Set DOMAIN` or `Replace 'change-me'` | Fill in `.env` (step 8), then `docker compose -f docker-compose.prod.yml up -d` |
 | Database `password authentication failed` | The password was changed after the first start. Either put the old one back, or reset the database: `down -v`, then step 9 again |
-| AI decision shows `fallback_reason: no_api_key` | `OPENROUTER_API_KEY` is empty; set it, then `restart web` |
+| AI decision shows `fallback_reason: no_api_key` | `OPENROUTER_API_KEY` is empty; set it, then `docker compose -f docker-compose.prod.yml up -d` |
 | AI decision shows `llm_error` | `logs web` shows the reason: 401 = wrong key, 402 = key credit limit reached or no credits |
 | `429 throttled` | The rate limit worked. Wait, or raise `SMART_RATE_LIMIT` / `ROUTE_RATE_LIMIT` |
 | Build is killed / server freezes | Out of memory: check the swap from step 7 (`free -h`) |
